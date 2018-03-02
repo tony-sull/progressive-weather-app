@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width'>
+	<meta name='theme-color' content='#6cb9c8'>
+	<title>Progressive Weather App</title>
+
+	<meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@tonyfsullivan">
+    <meta name="twitter:title" content="Progressive Weather App">
+    <meta name="twitter:description" content="A local weather app that fetches weather forecast from Openweathermap.org. A Progressive Web App built with Vue.js.">
+    <meta name="twitter:image" content="https://jimmerioles.github.io/progressive-weather-app/img/site-image-lg.jpg">
+
+    <meta property="og:title" content="Progressive Weather App">
+    <meta property="og:description" content="A local weather app that fetches weather forecast from Openweathermap.org. A Progressive Web App built with Vue.js.">
+    <meta property="og:image" content="https://jimmerioles.github.io/progressive-weather-app/img/site-image-lg.jpg">
+    <meta property="og:url" content="https://github.com/tonyfsullivan/progressive-weather-app">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<link rel='stylesheet' href='/global.css'>
+	<link rel='manifest' href='/manifest.json'>
+	<link rel='shortcut icon' href='/favicon.ico'>
+
+	<script>
+		if ('serviceWorker' in navigator) {
+		 	navigator.serviceWorker.register('/service-worker.js');
+		}
+	</script>
+
+	<!-- Sapper generates a <style> tag containing critical CSS
+	     for the current page. CSS for the rest of the app is
+	     lazily loaded when it precaches secondary pages -->
+	%sapper.styles%
+
+	<!-- This contains the contents of the <:Head> component, if
+	     the current page has one -->
+	%sapper.head%
+</head>
+<body>
+	<!-- The application will be rendered inside this element,
+	     because `templates/main.js` references it -->
+	<div id='sapper'>%sapper.html%</div>
+
+	<!-- Sapper creates a <script> tag containing `templates/main.js`
+	     and anything else it needs to hydrate the app and
+	     initialise the router -->
+	%sapper.scripts%
+
+	<noscript>
+		<strong>We're sorry but Progressive Weather App doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+	</noscript>
+</body>
+</html>
