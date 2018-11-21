@@ -1,0 +1,77 @@
+<header>
+    <small>Last Updated <b>{dateStr}</b></small>
+    <button on:click>
+        <img src="icons/refresh.svg" alt="refresh"/>
+    </button>
+</header>
+
+<style>
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: 44px;
+        width: calc(100% - 44px);
+    }
+
+    small {
+        width: 100%;
+        text-align: center;
+    }
+
+	button {
+		align-self: flex-end;
+		padding: 4px 10px;
+    }
+    
+    @media screen and (min-width: 450px) {
+        button {
+            padding: 12px 10px;
+        }
+    }
+</style>
+
+<script>
+    export default {
+        data() {
+            return {
+                msSinceUpdate: 0
+            }
+        },
+
+        oncreate() {
+            this.interval = setInterval(() => {
+                const { date } = this.store.get();
+
+                if (!date || !date.getTime) {
+                    return;
+                }
+
+                this.set({ msSinceUpdate: Date.now() - date.getTime() })
+            }, 60 * 1000);
+        },
+
+        ondestroy() {
+            clearInterval(this.interval);
+        },
+
+        computed: {
+            dateStr: ({ msSinceUpdate }) => {
+                const seconds = msSinceUpdate / 1000;
+                const minutes = seconds / 60;
+                const hours = minutes / 60;
+
+                if (minutes < 1) {
+                    return 'just now';
+                } else if (minutes < 60) {
+                    return `${minutes.toFixed(0)} min ago`;
+                } else if (hours < 24) {
+                    return `${hours.toFixed(0)} hours ago`;
+                } else {
+                    return 'days ago';
+                }
+            }
+        }
+    }
+</script>

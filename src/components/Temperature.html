@@ -1,0 +1,73 @@
+<section>
+    <div class="temperature__value">{ (scaleSymbol === 'C')? value : toFahrenheit(value) }</div>
+    <div class="temperature__right">
+        <button class="temperature__scale" on:click>
+            <span>
+                <span>&deg;{ scaleSymbol }</span>
+            </span>
+        </button>
+        <div class="temperature__high">
+            <img src="icons/high.svg" alt="high temperature"><span>{ (scaleSymbol === 'C')? high : toFahrenheit(high) }</span>&deg;
+        </div>
+        <div class="temperature__low">
+            <img src="icons/low.svg" alt="low temperature"><span>{ (scaleSymbol === 'C')? low : toFahrenheit(low) }</span>&deg;
+        </div>
+    </div>
+</section>
+
+<style>
+    section {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .temperature__value {
+        font-size: 7em;
+        color: rgba(255, 255, 255, 0.75);
+    }
+    .temperature__right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .temperature__scale {
+        padding-top: 5px;
+        font-size: 2em;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.75);
+    }
+    .temperature__high {
+        padding-top: 5px;
+    }
+    .temperature__high img {
+        vertical-align: middle;
+    }
+    .temperature__low img {
+        vertical-align: middle;
+    }
+</style>
+
+<script>
+    export default {
+        data() {
+            return {
+                value: 0,
+                high: 0,
+                low: 0,
+                temperatureUnit: 'Fahrenheit'
+            };
+        },
+
+        computed: {
+            scaleSymbol: ({ temperatureUnit }) => {
+                return temperatureUnit.charAt(0);
+            }
+        },
+
+        helpers: {
+            toFahrenheit(value) {
+                return Math.floor((value * 1.8) + 32);
+            }
+        }
+    }
+</script>

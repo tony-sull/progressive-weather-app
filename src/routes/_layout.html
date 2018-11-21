@@ -1,0 +1,36 @@
+<main class='app {$theme}'>
+	<svelte:component this={child.component} {...child.props}/>
+	<AppCredits />
+</main>
+
+<style>
+	.app {
+		height: 100vh;
+		width: 100vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.app--day {
+		/*background: linear-gradient(to bottom right, #6CB9C8, #6CB9C8) no-repeat;*/
+		background-color: #6CB9C8;
+	}
+	.app--night {
+		/*background: linear-gradient(to bottom right, #484F60, #484F60) no-repeat;*/
+		background-color: #484F60;
+	}
+	.app--day a:hover {
+		color: rgba(46, 146, 167, 0.9);
+	}
+	.app--night a:hover {
+		color: rgba(0, 0, 0, 0.5);
+	}
+</style>
+
+<script>
+	export default {
+		components: {
+			AppCredits: '../components/AppCredits.html'
+		}
+	};
+</script>

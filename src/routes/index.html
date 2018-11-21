@@ -1,0 +1,84 @@
+<svelte:window bind:online='online'/>
+
+<main class={$theme}>
+	<Update on:click='updateForecast()' />
+
+	<Measurements cloudiness={$cloudiness} humidity={$humidity} windSpeed={$windSpeed} />
+
+	<Temperature value={$temperatureValue} high={$temperatureHigh} low={$temperatureLow} temperatureUnit={$temperatureUnit} on:click='$toggleTemperatureUnit()' />
+
+	<Weather location={$location} description={$description} icon={$weatherIcon} />
+</main>
+
+<style>
+	main {
+		width: 100%;
+		height: 100%;
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
+		box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+	}
+	.app--day {
+		background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('images/morning.jpg');
+	}
+	.app--night {
+		background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('images/night.jpg');
+	}
+	@media screen and (min-width: 450px) {
+		main {
+			width: 330px;
+			height: 600px;
+			border-radius: 5px;
+		}
+	}
+</style>
+
+<script>
+	let fetch;
+
+	export default {
+		data() {
+			return {
+				online: false
+			};
+		},
+
+		oncreate() {
+			this.on('state', ({ current, changed }) => {
+				if ('online' in changed && current.online) {
+					this.updateForecast();
+				}
+			});
+
+			if (this.get().online) {
+				this.updateForecast();
+			}
+		},
+
+		methods: {
+			updateForecast() {
+				navigator.geolocation.getCurrentPosition(position => {
+					this.store.updateForecast(position, fetch);
+				}, error => {
+					console.log(error);
+				}, { enableHighAccuracy:true });
+			}
+		},
+
+		preload() {
+			fetch = this.fetch;
+		},
+
+		components: {
+			Measurements: '../components/Measurements.html',
+			Temperature: '../components/Temperature.html',
+			Update: '../components/Update.html',
+			Weather: '../components/Weather.html'
+		}
+	}
+</script>

@@ -11,17 +11,31 @@ npm run dev
 
 Open up [localhost:3000](http://localhost:3000) and start clicking around.
 
+Consult [sapper.svelte.technology](https://sapper.svelte.technology) for help getting started.
+
+*[Click here for the Rollup version of this template](https://github.com/sveltejs/sapper-template/tree/rollup)*
 
 ## Structure
 
-Sapper expects to find three directories in the root of your project — `assets`, `routes` and `templates`.
+Sapper expects to find three directories in the root of your project —  `app`, `assets` and `routes`.
+
+
+### app
+
+The [app](app) directory contains the entry points for your app — `client.js`, `server.js` and (optionally) a `service-worker.js` — along with a `template.html` file.
 
 
 ### assets
 
-The [assets](assets) directory contains any static assets that should be available. These are served using [serve-static](https://github.com/expressjs/serve-static).
+The [assets](assets) directory contains any static assets that should be available. These are served using [sirv](https://github.com/lukeed/sirv).
 
-In your [service-worker.js](templates/service-worker.js) file, Sapper makes these files available as `__assets__` so that you can cache them (though you can choose not to, for example if you don't want to cache very large files).
+In your [service-worker.js](app/service-worker.js) file, you can import these as `assets` from the generated manifest...
+
+```js
+import { assets } from './manifest/service-worker.js';
+```
+
+...so that you can cache them (though you can choose not to, for example if you don't want to cache very large files).
 
 
 ### routes
@@ -37,21 +51,6 @@ There are three simple rules for naming the files that define your routes:
 * A file called `routes/about.html` corresponds to the `/about` route. A file called `routes/blog/[slug].html` corresponds to the `/blog/:slug` route, in which case `params.slug` is available to the route
 * The file `routes/index.html` (or `routes/index.js`) corresponds to the root of your app. `routes/about/index.html` is treated the same as `routes/about.html`.
 * Files and directories with a leading underscore do *not* create routes. This allows you to colocate helper modules and components with the routes that depend on them — for example you could have a file called `routes/_helpers/datetime.js` and it would *not* create a `/_helpers/datetime` route
-
-
-### templates
-
-This directory should contain the following files at a minimum:
-
-* [2xx.html](templates/2xx.html) — a template for the page to serve for valid requests
-* [4xx.html](templates/4xx.html) — a template for 4xx-range errors (such as 404 Not Found)
-* [5xx.html](templates/5xx.html) — a template for 5xx-range errors (such as 500 Internal Server Error)
-* [main.js](templates/main.js) — this module initialises Sapper
-* [service-worker.js](templates/service-worker.js) — your app's service worker
-
-Inside the HTML templates, Sapper will inject various values as indicated by `%sapper.xxxx%` tags. Inside JavaScript files, Sapper will replace strings like `__dev__` with the appropriate value.
-
-In lieu of documentation (bear with us), consult the files to see what variables are available and how they're used.
 
 
 ## Webpack config
@@ -71,11 +70,17 @@ now
 ```
 
 
+## Using external components
+
+When using Svelte components installed from npm, such as [@sveltejs/svelte-virtual-list](https://github.com/sveltejs/svelte-virtual-list), Svelte needs the original component source (rather than any precompiled JavaScript that ships with the component). This allows the component to be rendered server-side, and also keeps your client-side app smaller.
+
+Because of that, it's essential that webpack doesn't treat the package as an *external dependency*. You can either modify the `externals` option in [webpack/server.config.js](webpack/server.config.js), or simply install the package to `devDependencies` rather than `dependencies`, which will cause it to get bundled (and therefore compiled) with your app:
+
+```bash
+yarn add -D @sveltejs/svelte-virtual-list
+```
+
+
 ## Bugs and feedback
 
 Sapper is in early development, and may have the odd rough edge here and there. Please be vocal over on the [Sapper issue tracker](https://github.com/sveltejs/sapper/issues).
-
-
-## License
-
-[LIL](LICENSE)
