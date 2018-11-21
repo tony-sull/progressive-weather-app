@@ -6,3 +6,4 @@ cypress/screenshots
 templates/.*
 app/manifest
 __sapper__
+dist

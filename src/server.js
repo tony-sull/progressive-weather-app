@@ -9,6 +9,7 @@ const dev = NODE_ENV === 'development';
 
 polka() // You can also use Express
 	.use(
+		'/progressive-weather-app',
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
 		sapper.middleware({
